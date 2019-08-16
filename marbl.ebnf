@@ -1,0 +1,92 @@
+grammar ::= definition*
+ 
+definition ::= function | class | interface | module | import
+
+import ::= 'import' symbol
+
+function ::= 'func' identifier '(' argument_list ')' ':' type block
+
+argument_list ::= variable_def*
+
+block ::= '{' statement* '}'
+
+statement ::= (variable_def | expression) ';'
+
+
+// =========== expressions ================
+
+
+expression ::= precedence_10 |
+               '(' expression ')' |
+               (precedence_10 '=' precedence_10 |
+                precedence_10 '+=' precedence_10 |
+                precedence_10 '-=' precedence_10 |
+                precedence_10 '*=' precedence_10 |
+                precedence_10 '/=' precedence_10 |
+                precedence_10 '%=' precedence_10 |
+                precedence_10 '<<=' precedence_10 |
+                precedence_10 '>>=' precedence_10 |
+                precedence_10 '&=' precedence_10 |
+                precedence_10 '^=' precedence_10 |
+                precedence_10 '|=' precedence_10)+
+
+precedence_10 ::= precedence_9 |
+                  '(' expression ')' |
+                  (precedence_9 '||' precedence_9)+
+
+precedence_9 ::= precedence_8 |
+                 '(' expression ')' |
+                 (precedence_8 '&&' precedence_8)+
+
+precedence_8 ::= precedence_7 |
+                  '(' expression ')' |
+                  (precedence_7 '|' precedence_7)+
+
+precedence_7 ::= precedence_6 |
+                  '(' expression ')' |
+                  (precedence_6 '^' precedence_6)+
+
+precedence_6 ::= precedence_5 |
+                  '(' expression ')' |
+                  (precedence_5 '&' precedence_5)+
+
+precedence_5 ::= precedence_4 |
+                  '(' expression ')' |
+                  (precedence_4 '==' precedence_4 |
+                  precedence_4 '!=' precedence_4 |
+                  precedence_4 '>=' precedence_4 |
+                  precedence_4 '<=' precedence_4)+
+
+precedence_4 ::= precedence_3 |
+                  '(' expression ')' |
+                  (precedence_3 '<<' precedence_3 |
+                  precedence_3 '>>' precedence_3)+
+
+precedence_3 ::= precedence_3 |
+                  '(' expression ')' |
+                  (precedence_2 '+' precedence_2 |
+                  precedence_2 '-' precedence_2)+
+
+precedence_2 ::= precedence_2 |
+                  '(' expression ')' |
+                  (precedence_1 '*' precedence_1 |
+                  precedence_1 '/' precedence_1 |
+                  precedence_1 '%' precedence_1)+
+
+precedence_1 ::= precedence_11 |
+                  '(' expression ')' |
+                  ('*' precedence_0 |
+                  '&' precedence_0 |
+                  '!' precedence_0 |
+                  '+' precedence_0 |
+                  '-' precedence_0 |
+                  'new' precedence_0 |
+                  'del' precedence_0)+
+
+precedence_0 ::= '(' expression ')' |
+                  (symbol '.' symbol |
+                  symbol '->' symbol |
+                  symbol '[]' |
+                  symbol '()')+
+
+// ========================================

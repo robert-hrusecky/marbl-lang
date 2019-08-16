@@ -1,0 +1,5 @@
+include(mod)
+set(mod_srcs Parser.cpp SymbolTable.cpp)
+set(mod_test_srcs test.cpp)
+make_mod()
+link_against(lexer)
